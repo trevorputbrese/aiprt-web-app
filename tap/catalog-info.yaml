@@ -5,7 +5,7 @@ metadata:
   namespace: aiprt
   description: aiprt Web App
   annotations:
-    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=aiprt"
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=aiprt-web"
     backstage.io/techdocs-ref: dir:.
   tags:
    - aiprt
