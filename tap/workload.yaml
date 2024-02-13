@@ -7,13 +7,13 @@ metadata:
     # apps.tanzu.vmware.com/has-tests: "true"
     apps.tanzu.vmware.com/workload-type: web
   name: aiprt-web
-  namespace: sandbox-1-ns
+  namespace: airprt
 spec:
   source:
     git:
       ref:
         branch: main
-      url: https://github.com/trevorputbrese/demo-ruby-app
+      url: https://github.com/trevorputbrese/aiprt-web-app
   params:
   - name: clusterBuilder
     value: full-jammy
