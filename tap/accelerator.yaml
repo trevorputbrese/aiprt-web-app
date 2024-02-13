@@ -1,11 +1,11 @@
 accelerator:
-  displayName: Immigration Web Service
-  description: USCIS App for Immigration Web Service developed by Global team
+  displayName: AIPRT Web Service
+  description: DPD App for aiprt Web Service developed by AIPRT team
   iconUrl: https://www.ruby-lang.org/images/header-ruby-logo.png
   tags: 
   - Ruby
   - web
-  - Immigration
+  - aiprt
   
   options:
   - label: Liveness Probe Port
@@ -55,7 +55,7 @@ accelerator:
       text: Kafka
   - label: Class Claim Name
     description: "The name of the Class Claim used to connect to the messaging service."
-    defaultValue: immigration-meb-messaging-gateway
+    defaultValue: aiprt-meb-messaging-gateway
     name: msgbrokerName
     inputType: text
     dataType: string

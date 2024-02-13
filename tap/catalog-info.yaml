@@ -1,24 +1,24 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: immigration-web
-  namespace: global
-  description: Immigration Web App
+  name: aiprt-web
+  namespace: aiprt
+  description: aiprt Web App
   annotations:
-    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=immigration"
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=aiprt"
     backstage.io/techdocs-ref: dir:.
   tags:
-   - global
-   - uscis
+   - aiprt
+   - dpd
    - demo
   links:
-    - url: https://www.uscis.gov/
-      title: USCIS Home
+    - url: https://www.dpd.gov/
+      title: DPD Home
       icon: language
 spec:
   type: service
   lifecycle: production
-  owner: global-team
-  system: immigration-system
+  owner: aiprt-team
+  system: aiprt-system
   consumesApis:
-   - global/immigration-rest-service-a6c5a207
+   - aiprt/aiprt-rest-service-6845e3ec

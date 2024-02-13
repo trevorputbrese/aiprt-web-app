@@ -1,6 +1,6 @@
 LOCAL_PATH = os.getenv("LOCAL_PATH", default='.')
 NAMESPACE = os.getenv("NAMESPACE", default='sandbox-1-ns')
-WORKLOAD_NAME = 'immigration-web-iterate'
+WORKLOAD_NAME = 'aiprt-web-iterate'
 
 k8s_custom_deploy(
    WORKLOAD_NAME,
