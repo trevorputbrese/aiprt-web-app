@@ -1,0 +1,112 @@
+accelerator:
+  displayName: Immigration Web Service
+  description: USCIS App for Immigration Web Service developed by Global team
+  iconUrl: https://www.ruby-lang.org/images/header-ruby-logo.png
+  tags: 
+  - Ruby
+  - web
+  - Immigration
+  
+  options:
+  - label: Liveness Probe Port
+    description: Port for Liveness probe.  Value here will be added to the Workload yaml.
+    defaultValue: "8080"
+    name: livenessProbePort
+    inputType: text
+    dataType: string
+    required: true
+  - label: Liveness Probe Path
+    description: Path for Liveness probe.  Value here will be added to the Workload yaml.
+    defaultValue: "/"
+    name: livenessProbePath
+    inputType: text
+    dataType: string
+    required: true
+  - label: Initial Delay Seconds
+    description: Initial Delay Seconds for Liveness probe.  Value here will be added to the Workload yaml.
+    defaultValue: "20"
+    name: initialDelaySeconds
+    inputType: text
+    dataType: string
+    required: true
+  - label: Liveness Probe Interval
+    description: PeriodSeconds for Liveness probe.  Value here will be added to the Workload yaml.
+    defaultValue: "20"
+    name: periodSeconds
+    inputType: text
+    dataType: string
+    required: true
+  - label: Workload Namespace
+    description:  The namespace where the application services will be deployed.  This field is needed for properly creating resource claims.
+    defaultValue: workloads
+    name: workloadNamespace
+    inputType: text
+    dataType: string
+    required: true
+  - label: Messaging Service Type
+    description: The type of messaging services the workload will connect to.
+    inputType: select
+    defaultValue: rabbitmq
+    name: brokerType
+    choices:
+    - value: rabbitmq
+      text: RabbitMQ
+    - value: kafka
+      text: Kafka
+  - label: Class Claim Name
+    description: "The name of the Class Claim used to connect to the messaging service."
+    defaultValue: immigration-meb-messaging-gateway
+    name: msgbrokerName
+    inputType: text
+    dataType: string
+    required: true
+  imports:
+    - name: tap-workload
+
+engine:
+  merge:
+  - exclude: 
+      ["**/templates/**", "**/icons/**", "**/.git/**", "**/catalog/catalog.yaml"]
+  - include: ["**/config/workload.yaml", "**/templates/workloads.template"]
+    chain:
+    - type: ReplaceText
+      substitutions:
+        - text: "msgbroker-spring-smtp-gateway"
+          with: "#msgbrokerName"
+        - text: "workloads"
+          with: "#workloadNamespace"  
+        - text: "1026"
+          with: "#containerPort"     
+        - text: "25"
+          with: "#servicePort"
+        - text: "<profile>"
+          with: "#brokerType"          
+    - type: RewritePath
+      regex: 'templates/workloads.template'
+      rewriteTo: "'config/workloads.yaml'"
+    - type: InvokeFragment
+      reference: tap-workload
+  - include: [ "**/catalog/catalog.yaml" ]
+    chain:
+      - type: ReplaceText
+        substitutions:
+          - text: "name: smtp-gateway"
+            with: "'name: ' + #artifactId.toLowerCase() + '-smtp-gateway'"
+          - text: "name: smtp-sink"
+            with: "'name: ' + #artifactId.toLowerCase() + '-smtp-sink'"
+          - text: "app.kubernetes.io/part-of=spring-smtp-gateway"
+            with: "'app.kubernetes.io/part-of=' + #artifactId.toLowerCase()"
+  - type: InvokeFragment
+    reference: build-wrapper-maven
+  - chain:
+    - type: InvokeFragment
+      reference: build-wrapper-maven
+    - type: RewritePath
+      rewriteTo: "'smtp-gateway/' + (#folder != null ? #folder : '') + #filename"       
+  - chain:
+    - type: InvokeFragment
+      reference: build-wrapper-maven
+    - type: RewritePath
+      rewriteTo: "'smtp-sink/' + (#folder != null ? #folder : '') + #filename"  
+  - include: ["README.md"]  
+  - type: Provenance
