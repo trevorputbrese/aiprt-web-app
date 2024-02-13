@@ -19,6 +19,6 @@ spec:
   type: service
   lifecycle: production
   owner: aiprt-team
-  system: aiprt-system
+  system: ai-analysis-system
   consumesApis:
    - aiprt/aiprt-rest-service-6845e3ec
